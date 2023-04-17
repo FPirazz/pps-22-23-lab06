@@ -47,17 +47,18 @@ object FunctionsImpl2 extends Functions2:
     a.foldRight(summer.unit)((h1, h2) => summer.combine(h1, h2))
 
 
-given Combiner[Double] with
-  override def unit: Double = 0.0
-  override def combine(a: Double, b: Double): Double = a + b
+object FunctionsCombiner:
+  given Combiner[Double] with
+    override def unit: Double = 0.0
+    override def combine(a: Double, b: Double): Double = a + b
 
-given Combiner[String] with
-  override def unit: String = ""
-  override def combine(a: String, b: String): String = a ++ b
+  given Combiner[String] with
+    override def unit: String = ""
+    override def combine(a: String, b: String): String = a ++ b
 
-given Combiner[Int] with
-  override def unit: Int = Integer.MIN_VALUE
-  override def combine(a: Int, b: Int): Int = if a > b then a else b
+  given Combiner[Int] with
+    override def unit: Int = Integer.MIN_VALUE
+    override def combine(a: Int, b: Int): Int = if a > b then a else b
 
 
 
@@ -69,6 +70,8 @@ given Combiner[Int] with
 //  println(f.concat(Seq())) // ""
 //  println(f.max(List(-10, 3, -5, 0))) // 3
 //  println(f.max(List())) // -2147483648
+
+  import FunctionsCombiner.given
 
   val f2: Functions2 = FunctionsImpl2
   println(f2.sum(List(10.0, 20.0, 30.1))) // 60.1
